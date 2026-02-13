@@ -410,31 +410,23 @@ header h1 {font-size:24px;}
 <button class="tab-button" onclick="switchTab(3, this, event)">Final Thoughts</button>
 </div>
 
-<!-- ===== HIDDEN NETLIFY FORM (for actual submission) ===== -->
+<!-- ===== HIDDEN NETLIFY FORM ===== -->
 <form name="h-care-feedback" method="POST" netlify netlify-honeypot="bot-field" style="display:none;">
 <input type="hidden" name="form-name" value="h-care-feedback" />
 <input type="hidden" name="bot-field" />
 <input type="hidden" name="timestamp" id="form-timestamp" />
 <input type="hidden" name="sessionId" id="form-sessionId" />
-
-<!-- Section 1 -->
 <input type="hidden" name="segment" id="form-segment" />
 <input type="hidden" name="worryFrequency" id="form-worryFrequency" />
 <textarea name="biggestConcern" id="form-biggestConcern"></textarea>
-
-<!-- Section 2 -->
 <input type="hidden" name="usingSolutions" id="form-usingSolutions" />
 <input type="hidden" name="solutions" id="form-solutions" />
 <input type="hidden" name="satisfactionRating" id="form-satisfactionRating" />
 <textarea name="currentProblem" id="form-currentProblem"></textarea>
-
-<!-- Section 3 -->
 <input type="hidden" name="interest" id="form-interest" />
 <input type="hidden" name="features" id="form-features" />
 <textarea name="concerns" id="form-concerns"></textarea>
 <input type="hidden" name="price" id="form-price" />
-
-<!-- Section 4 -->
 <input type="text" name="name" id="form-name" />
 <input type="email" name="email" id="form-email" />
 <input type="tel" name="phone" id="form-phone" />
@@ -448,7 +440,6 @@ header h1 {font-size:24px;}
 <h3>Tell Us About Your Situation</h3>
 <p class="subtitle">Help us understand who you're looking to protect and what challenges you face.</p>
 
-<form id="uiForm1">
 <div class="form-group">
 <label>Who are you looking to protect?</label>
 <div class="checkbox-group">
@@ -504,7 +495,6 @@ header h1 {font-size:24px;}
 <button type="button" class="btn-secondary" onclick="prevTab(0)">Back</button>
 <button type="button" class="btn-primary" onclick="nextTab(1)">Next</button>
 </div>
-</form>
 </div>
 
 <!-- ===== FORM SECTION 2: CURRENT SOLUTIONS ===== -->
@@ -512,7 +502,6 @@ header h1 {font-size:24px;}
 <h3>What Are You Currently Using?</h3>
 <p class="subtitle">Help us understand what's already in place and why it might not be enough.</p>
 
-<form id="uiForm2">
 <div class="form-group">
 <label>Are you currently using any safety monitoring solutions?</label>
 <div class="radio-group">
@@ -584,7 +573,6 @@ header h1 {font-size:24px;}
 <button type="button" class="btn-secondary" onclick="prevTab(0)">Back</button>
 <button type="button" class="btn-primary" onclick="nextTab(2)">Next</button>
 </div>
-</form>
 </div>
 
 <!-- ===== FORM SECTION 3: PRODUCT FIT ===== -->
@@ -592,7 +580,6 @@ header h1 {font-size:24px;}
 <h3>H-Care Concept Feedback</h3>
 <p class="subtitle">We're exploring AI-powered wearable safety monitoring. What do you think?</p>
 
-<form id="uiForm3">
 <div class="form-group">
 <label><strong>H-Care Concept:</strong> A discreet wearable that learns normal patterns and automatically detects unusual activity (falls, breathing changes, wandering) — then alerts you instantly without requiring manual activation.</label>
 </div>
@@ -686,7 +673,6 @@ header h1 {font-size:24px;}
 <button type="button" class="btn-secondary" onclick="prevTab(1)">Back</button>
 <button type="button" class="btn-primary" onclick="nextTab(3)">Next</button>
 </div>
-</form>
 </div>
 
 <!-- ===== FORM SECTION 4: FINAL THOUGHTS ===== -->
@@ -694,7 +680,6 @@ header h1 {font-size:24px;}
 <h3>Final Thoughts & Contact</h3>
 <p class="subtitle">Help us improve and stay in touch about H-Care development.</p>
 
-<form id="uiForm4">
 <div class="form-group">
 <label>Full Name *</label>
 <input type="text" id="name" placeholder="Your name" required>
@@ -742,11 +727,10 @@ header h1 {font-size:24px;}
 
 <div class="btn-group">
 <button type="button" class="btn-secondary" onclick="prevTab(2)">Back</button>
-<button type="submit" class="btn-primary" onclick="submitForm(event)">Submit Feedback</button>
+<button type="button" class="btn-primary" onclick="submitForm()">Submit Feedback</button>
 </div>
 
 <div class="success-message" id="success4"></div>
-</form>
 </div>
 
 </div>
@@ -759,16 +743,13 @@ header h1 {font-size:24px;}
 </footer>
 
 <script>
-// ===== CONFIGURATION =====
-const GA_MEASUREMENT_ID = 'G-XXXXXXXXXX'; // Replace with your GA4 ID
+const GA_MEASUREMENT_ID = 'G-XXXXXXXXXX';
 
 let currentTab = 0;
 
-// ===== EVENT TRACKING =====
 function trackEvent(eventType, eventValue) {
   console.log(`Event: ${eventType} - Value: ${eventValue}`);
   
-  // Send to Google Analytics 4
   if (typeof gtag !== 'undefined') {
     gtag('event', eventType, {
       'event_category': 'feedback_form',
@@ -778,7 +759,6 @@ function trackEvent(eventType, eventValue) {
     });
   }
   
-  // Store locally
   storeEventLocally(eventType, eventValue);
 }
 
@@ -803,13 +783,11 @@ function getSessionId() {
   return sessionId;
 }
 
-// ===== PAGE VIEW TRACKING =====
 window.addEventListener('load', function() {
   trackEvent('page_load', 'feedback_form_view');
   console.log('🎯 H-Care Feedback Landing Page Loaded');
 });
 
-// ===== TAB NAVIGATION =====
 function switchTab(tabIndex, button, event) {
   if (event) {
     event.preventDefault();
@@ -827,7 +805,6 @@ function switchTab(tabIndex, button, event) {
   currentTab = tabIndex;
   trackEvent('tab_navigation', `tab_${tabIndex}`);
   
-  // Scroll to form smoothly without jerky behavior
   setTimeout(() => {
     document.querySelector('.form-section.active').scrollIntoView({ 
       behavior: 'smooth',
@@ -838,15 +815,11 @@ function switchTab(tabIndex, button, event) {
 
 function nextTab(tabIndex) {
   const buttons = document.querySelectorAll('.tab-button');
-  const event = new Event('click');
-  buttons[tabIndex].dispatchEvent(event);
   buttons[tabIndex].click();
 }
 
 function prevTab(tabIndex) {
   const buttons = document.querySelectorAll('.tab-button');
-  const event = new Event('click');
-  buttons[tabIndex].dispatchEvent(event);
   buttons[tabIndex].click();
 }
 
@@ -857,14 +830,7 @@ function selectRating(btn) {
   document.getElementById('satisfaction-rating').value = btn.getAttribute('data-rating');
 }
 
-function scrollToTop() {
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-}
-
-// ===== FORM SUBMISSION TO NETLIFY =====
-async function submitForm(event) {
-  event.preventDefault();
-  
+function submitForm() {
   const name = document.getElementById('name').value.trim();
   const email = document.getElementById('email').value.trim();
   
@@ -878,71 +844,52 @@ async function submitForm(event) {
     return;
   }
 
-  const submitBtn = event.target.querySelector('.btn-primary');
-  submitBtn.disabled = true;
-  submitBtn.textContent = 'Submitting...';
+  const formData = collectAllFormData();
   
-  try {
-    // Collect all form data
-    const formData = collectAllFormData();
+  document.getElementById('form-timestamp').value = formData.timestamp;
+  document.getElementById('form-sessionId').value = formData.sessionId;
+  document.getElementById('form-segment').value = formData.segment;
+  document.getElementById('form-worryFrequency').value = formData.worryFrequency;
+  document.getElementById('form-biggestConcern').value = formData.biggestConcern;
+  document.getElementById('form-usingSolutions').value = formData.usingSolutions;
+  document.getElementById('form-solutions').value = formData.solutions;
+  document.getElementById('form-satisfactionRating').value = formData.satisfactionRating;
+  document.getElementById('form-currentProblem').value = formData.currentProblem;
+  document.getElementById('form-interest').value = formData.interest;
+  document.getElementById('form-features').value = formData.features;
+  document.getElementById('form-concerns').value = formData.concerns;
+  document.getElementById('form-price').value = formData.price;
+  document.getElementById('form-name').value = formData.name;
+  document.getElementById('form-email').value = formData.email;
+  document.getElementById('form-phone').value = formData.phone;
+  document.getElementById('form-city').value = formData.city;
+  document.getElementById('form-finalFeedback').value = formData.finalFeedback;
+  document.getElementById('form-followup').value = formData.followup;
+  
+  const netlifyForm = document.querySelector('form[name="h-care-feedback"]');
+  const formDataToSend = new FormData(netlifyForm);
+  
+  fetch('/', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: new URLSearchParams(formDataToSend).toString()
+  }).then(() => {
+    trackEvent('form_submission', 'success');
     
-    // Populate hidden form fields
-    document.getElementById('form-timestamp').value = formData.timestamp;
-    document.getElementById('form-sessionId').value = formData.sessionId;
-    document.getElementById('form-segment').value = formData.segment;
-    document.getElementById('form-worryFrequency').value = formData.worryFrequency;
-    document.getElementById('form-biggestConcern').value = formData.biggestConcern;
-    document.getElementById('form-usingSolutions').value = formData.usingSolutions;
-    document.getElementById('form-solutions').value = formData.solutions;
-    document.getElementById('form-satisfactionRating').value = formData.satisfactionRating;
-    document.getElementById('form-currentProblem').value = formData.currentProblem;
-    document.getElementById('form-interest').value = formData.interest;
-    document.getElementById('form-features').value = formData.features;
-    document.getElementById('form-concerns').value = formData.concerns;
-    document.getElementById('form-price').value = formData.price;
-    document.getElementById('form-name').value = formData.name;
-    document.getElementById('form-email').value = formData.email;
-    document.getElementById('form-phone').value = formData.phone;
-    document.getElementById('form-city').value = formData.city;
-    document.getElementById('form-finalFeedback').value = formData.finalFeedback;
-    document.getElementById('form-followup').value = formData.followup;
+    const successMsg = document.getElementById('success4');
+    successMsg.textContent = `✓ Thank you, ${name}! Your feedback has been recorded. We'll be in touch soon.`;
+    successMsg.classList.add('show');
     
-    // Submit to Netlify
-    const netlifyForm = document.querySelector('form[name="h-care-feedback"]');
-    const formDataToSend = new FormData(netlifyForm);
+    console.log('✅ Form submitted successfully');
     
-    const response = await fetch('/', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: new URLSearchParams(formDataToSend).toString()
-    });
-    
-    if (response.ok) {
-      trackEvent('form_submission', 'success');
-      
-      const successMsg = document.getElementById('success4');
-      successMsg.textContent = `✓ Thank you, ${name}! Your feedback has been recorded. We'll be in touch soon.`;
-      successMsg.classList.add('show');
-      
-      console.log('✅ Form submitted successfully to Netlify');
-      console.log('Session ID:', getSessionId());
-      
-      // Reset form
-      document.getElementById('uiForm4').reset();
-      
-      setTimeout(() => {
-        scrollToTop();
-      }, 2000);
-    } else {
-      throw new Error('Network response was not ok');
-    }
-  } catch (error) {
-    console.error('Submission error:', error);
+    setTimeout(() => {
+      document.getElementById('form-name').value = '';
+      document.getElementById('form-email').value = '';
+    }, 2000);
+  }).catch(error => {
+    console.error('Error:', error);
     trackEvent('form_submission', 'error');
-    showError('error4', 'Failed to submit. Please try again.');
-    submitBtn.disabled = false;
-    submitBtn.textContent = 'Submit Feedback';
-  }
+  });
 }
 
 function collectAllFormData() {
@@ -991,12 +938,10 @@ function showError(elementId, message) {
   errorEl.classList.add('show');
 }
 
-// ===== UNLOAD TRACKING =====
 window.addEventListener('beforeunload', function() {
   trackEvent('page_unload', 'feedback_form_exit');
 });
 
-// ===== DEBUG CONSOLE =====
 window.viewTrackedEvents = function() {
   const events = JSON.parse(localStorage.getItem('h_care_events') || '[]');
   console.log('=== TRACKED EVENTS ===', events);
@@ -1004,7 +949,6 @@ window.viewTrackedEvents = function() {
 };
 
 console.log('%c 🎯 H-CARE FEEDBACK FORM READY', 'color: #3b82f6; font-size: 16px; font-weight: bold;');
-console.log('Type viewTrackedEvents() to see analytics data');
 </script>
 
 </body>
